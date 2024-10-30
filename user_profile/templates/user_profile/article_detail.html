@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Post Detail
+{% endblock %}
+
+{% block content %}
+<h1 class="text-center mt-4">Post Detail</h1>
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <!-- Profile image and owner name -->
+            <div class="d-flex align-items-center mb-3">
+                {% if article_detail.post_owner.profile.user_img %}
+                    <img src="{{ article_detail.post_owner.profile.user_img.url }}" alt="Profile image" class="img-fluid rounded-circle" style="width: 60px; height: 60px;">
+                {% else %}
+                    <div class="bg-light rounded-circle" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">No image</div>
+                {% endif %}
+
+
+
+
+                <h5 class="ms-3">{{ article_detail.post_owner.first_name }} {{ article_detail.post_owner.last_name }}</h5>
+            </div>
+
+            <h5 class="card-title">{{ article_detail.post_name }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ article_detail.post_title }}</h6>
+            <p class="card-text">{{ article_detail.post_description|safe }}</p>
+
+            {% if article_detail.post_img %}
+                <img src="{{ article_detail.post_img.url }}" alt="Image for {{ article_detail.post_name }}" class="img-fluid mb-3">
+            {% else %}
+                <p class="text-muted">No image available</p>
+            {% endif %}
+
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <button id="like-button" class="btn btn-outline-secondary" onclick="toggleLike()">
+                    {% if request.user in article_detail.post_like.all %}
+                        Unlike {{ article_detail.total_likes }}
+                    {% else %}
+                        Like {{ article_detail.total_likes }}
+                    {% endif %}
+                </button>
+
+                <a href="{% url 'your_post' %}" class="btn btn-outline-secondary me-2">Your Posts</a>
+                <a href="{% url 'post' %}" class="btn btn-outline-secondary">All Posts</a>
+            </div>
+        </div> <!-- End of card body -->
+    </div> <!-- End of card -->
+
+    <!-- Start Comments Section -->
+ <!-- Include the comments section -->
+    {% include 'user_profile/comment/comments.html' %}
+    <!-- END Comments Section -->
+</div> <!-- End of container -->
+
+
+
+<script>
+    function toggleLike() {
+        const postId = {{ article_detail.pk }};
+        const button = document.getElementById('like-button');
+
+        fetch(`{% url 'like_post' article_detail.pk %}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            button.innerHTML = data.liked ? `Unlike ${data.total_likes}` : `Like ${data.total_likes}`;
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,59 @@
+<div class="comments-section mt-4">
+    <h3>Comments</h3>
+
+    <!-- Display the list of comments -->
+    <ul class="list-group">
+        {% for comment in comments %}
+            <li class="list-group-item">
+                <strong>
+                    <a href="{% url 'id_user_profile' comment.user.id %}">
+                        {{ comment.user.first_name }} {{ comment.user.last_name }}:
+                    </a>
+                </strong>
+                {{ comment.content|safe }}
+                <small class="text-muted">({{ comment.created_at|date:"F j, Y, g:i a" }})</small>
+
+
+                <!-- Add Update Button -->
+                    {% if comment.user == request.user or user_profile.user == request.user %}  <!-- Ensure only the comment owner can update -->
+                    <a href="{% url 'update_comment' comment.id %}" class="btn btn-warning btn-sm ms-2">Update</a>
+
+                    <!-- Delete Button -->
+                    <form method="post" action="{% url 'delete_comment' comment.id %}" class="delete-comment-form" style="display:inline;" onsubmit="return confirmDelete();">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm ms-2">Delete</button>
+                    </form>
+                {% endif %}
+            </li>
+
+
+
+        {% empty %}
+            <li class="list-group-item">No comments yet. Be the first to comment!</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Comment submission form -->
+    {% if user.is_authenticated %}
+        <style>label[for="id_content"] {display: none;}</style>
+        <div class="mt-4">
+            <h4>Leave a Comment</h4>
+            <form method="post">
+                {% csrf_token %}
+                {{ comment_form.as_p }}
+                {{ comment_form.media }}
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    {% else %}
+        <h4>To leave a comment, you should <a href="{% url 'login' %}">Login</a>.</h4>
+    {% endif %}
+</div>
+
+<!-- Add the confirmation script -->
+<script>
+
+    function confirmDelete() {
+        return confirm('Are You Sure to Delete comment');
+    }
+</script>

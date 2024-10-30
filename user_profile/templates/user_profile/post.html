@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Posts
+{% endblock %}
+
+{% block content %}
+<h1 class="text-center mt-4">Posts</h1>
+
+<div class="container">
+    <div class="row">
+        {% for post in posts %}
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        {% with post_owner_profile=post.post_owner.profile %}
+                            <div class="d-flex align-items-center mb-3">
+                                {% if post_owner_profile.user_img %}
+                                    <img src="{{ post_owner_profile.user_img.url }}" class="img-fluid rounded-circle" style="width: 50px; height: 50px;">
+                                {% else %}
+                                    <div class="bg-light rounded-circle" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">No image</div>
+                                {% endif %}
+                                <h5 class="ms-3"><a href="{% url 'article_detail' post.id %}">{{ post.post_owner.first_name }} {{ post.post_owner.last_name }}</a></h5> <!-- Show post owner's name -->
+                            </div>
+                        {% endwith %}
+
+                        <h5 class="card-title"><a href="{% url 'article_detail' post.id %}">{{ post.post_name }}</a></h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ post.post_title }}</h6>
+                        <p class="card-text">{{ post.post_description|safe }}</p>
+
+                        {% if post.post_img %}
+                            <img src="{{ post.post_img.url }}" alt="Image for {{ post.post_name }}" class="img-fluid mb-3">
+                        {% else %}
+                            <p class="text-muted">No image available.</p>
+                        {% endif %}
+
+                        {% if user.is_authenticated %}
+                            <div class="d-flex justify-content-between mt-3"> <!-- Button layout -->
+                                <a href="{% url 'article_detail' post.id %}" class="btn btn-primary">Visit Post</a>
+                                <a href="{% url 'home-page' %}" class="btn btn-secondary">Home</a>
+                                {% if request.user.id == post.post_owner.id %}
+                                    <form action="{% url 'delete_your_post' post.id %}" method="POST">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this post?');">Delete</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination controls -->
+
+<div class="d-flex justify-content-center mt-4">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if posts.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1" aria-label="First">
+                        <span aria-hidden="true">&laquo; First</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ posts.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">Previous</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="First">
+                        <span aria-hidden="true">&laquo; First</span>
+                    </a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">Previous</span>
+                    </a>
+                </li>
+            {% endif %}
+
+            <li class="page-item disabled">
+                <span class="page-link">
+                    Page {{ posts.number }} of {{ posts.paginator.num_pages }}
+                </span>
+            </li>
+
+            {% if posts.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ posts.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">Next</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ posts.paginator.num_pages }}" aria-label="Last">
+                        <span aria-hidden="true">Last &raquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">Next</span>
+                    </a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Last">
+                        <span aria-hidden="true">Last &raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+   <!-- END Pagination controls -->
+</div>
+    <script>
+document.addEventListener("DOMContentLoaded", function() {
+    const paginationLinks = document.querySelectorAll(".pagination .page-link");
+
+    paginationLinks.forEach(function(link) {
+        link.addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent the default jump behavior
+
+            const page = link.getAttribute("href"); // Get the href attribute (e.g., ?page=2)
+
+            // Use AJAX to load the next page content without reloading the entire page
+            fetch(page)
+                .then(response => response.text())
+                .then(data => {
+                    // Replace the content of the posts section (adjust the selector based on your HTML structure)
+                    document.querySelector('.container .row').innerHTML = new DOMParser()
+                        .parseFromString(data, 'text/html')
+                        .querySelector('.container .row').innerHTML;
+
+                    // Update the pagination links
+                    document.querySelector('.pagination').innerHTML = new DOMParser()
+                        .parseFromString(data, 'text/html')
+                        .querySelector('.pagination').innerHTML;
+
+                    // Add the event listener again for the new pagination links
+                    document.dispatchEvent(new Event("DOMContentLoaded"));
+                })
+                .catch(error => console.error('Error fetching new page:', error));
+        });
+    });
+});
+</script>
+
+{% endblock %}

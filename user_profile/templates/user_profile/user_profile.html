@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}
+User Profile
+{% endblock %}
+
+{% block content %}
+
+<h1>User Profile</h1>
+
+{% if user.is_authenticated %}
+
+
+<div class="card mb-3" style="max-width: 540px;">
+    <div class="row no-gutters">
+        <div class="col-md-4">
+            {% with profile=user.profile %}
+                {% if profile.user_img %}
+                    <img src="{{ profile.user_img.url }}" class="card-img profile-img_shah" alt="{{ user.username }}'s profile image">
+                {% else %}
+                {% endif %}
+            {% endwith %}
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+
+
+
+                <p class="card-text">First Name: {{ user.first_name }}</p>
+                <p class="card-text">Last Name: {{ user.last_name }}</p>
+                <p class="card-text">Email Address: {{ user.email }}</p>
+
+                <!-- Attempt to access the user's profile data -->
+                {% with profile=user.profile %}
+                    {% if profile %}
+                        <p class="card-text">Full Name: {{ profile.name }}</p>
+                        <p class="card-text">Country: {{ profile.country }}</p>
+                        <p class="card-text">City: {{ profile.city }}</p>
+                        <p class="card-text">Age: {{ profile.age }}</p>
+                        <p class="card-text">Birthday: {{ profile.birthday }}</p>
+                    {% else %}
+                        <p class="card-text">No profile information found. Please complete your profile.</p>
+                    {% endif %}
+                {% endwith %}
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+ {% if request.user == user %}
+        <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>
+    {% endif %}
+{% else %}
+    <p>You are not logged in. Please <a href="{% url 'login' %}">log in</a>.</p>
+{% endif %}
+
+
+
+
+{% endblock %}

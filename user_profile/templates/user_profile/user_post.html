@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Post
+{% endblock %}
+
+{% block content %}
+    <h2> All Posts</h2>
+    <div class="row">
+        {% for post in post_data %}
+            <div class="col-md-4 mb-4">
+                <div class="card" style="width: 100%;">
+                    <img class="card-img-top" src="{{ post.user_img.url }}" alt="Card image cap">
+                    <div class="card-body">
+
+                        <a href="{% url 'single-post' post_id=post.id %}"> <h5 class="card-title">{{ post.name }}</h5></a>
+                        <p class="card-text">{{ post.description }}</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">{{ post.email }}</li>
+                        <li class="list-group-item">{{ post.joined_date }}</li>
+                        <li class="list-group-item">{{ post.country }}</li>
+                    </ul>
+                    <div class="card-body">
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+    </div>
+{% endblock %}

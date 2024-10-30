@@ -1,0 +1,56 @@
+
+/* Header styling */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333; /* Dark gray color */
+}
+
+/* Card styling */
+.card {
+    background-color: #fff; /* White background */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/*!* Profile image styling *!*/
+/*img {*/
+/*    border-radius: 50%; !* Circular profile image *!*/
+/*    width: 60px; !* Fixed width *!*/
+/*    height: 60px; !* Fixed height *!*/
+/*}*/
+
+/* Button styling */
+button {
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text */
+    border: none; /* No border */
+    border-radius: 4px; /* Rounded corners */
+    padding: 10px 15px; /* Padding around text */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Smooth transition */
+}
+
+/* Button hover effect */
+button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Link styling */
+a {
+    color: #007bff; /* Link color */
+    text-decoration: none; /* No underline */
+    margin-right: 10px; /* Space between links */
+}
+
+/* Link hover effect */
+a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+/* Flexbox for buttons */
+button, a {
+    display: inline-block; /* Align buttons and links in a row */
+}

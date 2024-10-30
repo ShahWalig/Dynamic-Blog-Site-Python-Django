@@ -1,0 +1,24 @@
+<!-- update_comment.html -->
+{% extends 'base.html' %}
+
+{% block title %}
+Update Comment
+{% endblock %}
+
+{% block content %}
+<h1>Update Comment</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {{ form.media }}
+    <div style="display: flex; gap: 10px;">  <!-- Flexbox for alignment -->
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a href="{% url 'article_detail' comment.post.pk %}" class="btn btn-secondary">Cancel</a>
+        <!-- Delete Button -->
+        <a href="{% url 'delete_comment' comment.id %}" class="btn btn-danger">Delete</a>
+
+    </div>
+</form>
+
+{% endblock %}
