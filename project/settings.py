@@ -4,23 +4,19 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-y)1&@$4vyp@*8pd2!m1v!q=)q*#a#ozlw5sqv)y4gje-$f5kgf'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-y)1&@$4vyp@*8pd2!m1v!q=)q*#a#ozlw5sqv)y4gje-$f5kgf')  # Use environment variable for production
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False  # Set to False in production
 
-ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['*']  # Change to your domain or IP in production
+ALLOWED_HOSTS = ['your-vercel-app.vercel.app']  # Replace with your actual Vercel URL
 
 # Application definition
 INSTALLED_APPS = [
     'user_profile.apps.UserProfileConfig',
     'ckeditor',
-
-    # 'user_profile',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,8 +39,6 @@ ROOT_URLCONF = 'project.urls'
 
 TEMPLATES = [
     {
-
-
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Adjust template directory
         'APP_DIRS': True,
@@ -62,7 +56,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'project.wsgi.application'
 
 # Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -106,14 +99,14 @@ MEDIA_ROOT = BASE_DIR / 'media/'  # Use pathlib for consistency
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Redirects after login/logout
 LOGIN_REDIRECT_URL = 'profile'  # Redirect after login
-LOGOUT_REDIRECT_URL = 'login'
+LOGOUT_REDIRECT_URL = 'login'    # Redirect after logout
 
+# CKEditor configuration
 CKEDITOR_CONFIGS = {
     'default': {
         'height': '150px',
-        # 'width': 'auto',  # This will set the width to full parent container width
         'width': '1100px',  # You can also set a fixed width like 800px
-        # 'toolbar': 'full',  # Example toolbar config, can be customized
     },
 }
