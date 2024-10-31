@@ -300,3 +300,7 @@ def home_view(request):
         'top_posts': top_posts,
     }
     return render(request, 'user_profile/home.html', context)
+
+
+def custom_404_view(request, exception):
+    return render(request, '404.html', status=404)
