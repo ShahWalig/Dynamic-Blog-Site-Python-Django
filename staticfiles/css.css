@@ -1,3 +1,36 @@
+body{
+    background-color: red;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination .page-item {
+    margin: 0 5px;
+}
+
+.pagination .page-link {
+    padding: 10px 15px;
+    border: 1px solid #007bff;
+    color: #007bff;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.pagination .page-link:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.pagination .disabled .page-link {
+    color: #6c757d;
+    cursor: not-allowed;
+    background-color: #f8f9fa;
+    border-color: #6c757d;
+}
 
 /* Header styling */
 h1 {
