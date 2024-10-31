@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-y)1&@$4vyp@*8pd2!m1v!q=)q*#a#ozlw5sqv)y4gje-$f5kgf')  # Use environment variable for production
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False  # Set to False in production
+DEBUG = True  # Set to False in production
 
 # ALLOWED_HOSTS = ['*']  # Change to your domain or IP in production
 ALLOWED_HOSTS = ['your-vercel-app.vercel.app']  # Replace with your actual Vercel URL
