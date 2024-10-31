@@ -10,6 +10,7 @@ from .forms import SignUpForm,  LoginForm, ProfileForm, PostForm, CommentForm, U
 from django.db.models import Count
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
+
 def view_home(request):
     return render(request, 'user_profile/home.html')
 
@@ -122,9 +123,7 @@ def edit_profile(request):
 #
 #     return render(request, 'user_profile/post.html', context)
 
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.shortcuts import render
-from .models import Post, Profile
+
 
 
 def PostView(request):
